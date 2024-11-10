@@ -7,7 +7,7 @@ import time
 from pathlib import Path
 import threading
 import psutil
-from datetime import datetime
+import signal
 
 process = None
 downloads_path = str(Path.home() / "Downloads")
@@ -46,6 +46,9 @@ def start_camera_detection(command):
         process.terminate()
     process = subprocess.Popen(command, shell=True)
 
+import os
+import signal
+
 def stop_detection():
     global process
     if process and process.poll() is None:  # Check if the process is still running
@@ -72,42 +75,43 @@ def stop_detection():
         except Exception as e:
             print(f"Error killing related processes: {e}")
 
-        # Zip the latest detection folder
-        zip_latest_results()
+        messagebox.showinfo("Camera Stopped", "Camera detection has been stopped.")
+
     else:
         messagebox.showinfo("Camera Stopped", "No camera detection process running.")
+
 
 def zip_latest_results():
     results_base_dir = "runs/detect"
     if os.path.exists(results_base_dir):
         result_dirs = [os.path.join(results_base_dir, d) for d in os.listdir(results_base_dir) if d.startswith("exp")]
-        latest_dir = max(result_dirs, key=os.path.getmtime)  # Get the most recent 'exp' directory
+        latest_dir = max(result_dirs, key=os.path.getmtime)
 
-        # Generate a unique name for the zip file using a timestamp
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        zip_filename = os.path.join(downloads_path, f"yolo_results_{timestamp}.zip")
+        zip_filename = os.path.join(downloads_path, "yolo_latest_results.zip")
 
         progress_label.config(text="Zipping latest results...")
         progress_bar["value"] = 0
         root.update_idletasks()
 
-        # Update progress bar while zipping
         for i in range(1, 11):
-            time.sleep(0.1)
+            time.sleep(0.1)  
             progress_bar["value"] += 10
             root.update_idletasks()
 
-        # Create a zip file from the latest detection folder
         shutil.make_archive(zip_filename.replace(".zip", ""), 'zip', latest_dir)
         progress_label.config(text=f"Latest results saved to {zip_filename}!")
         messagebox.showinfo("Zipping Complete", "Results stored successfully in Downloads.")
     else:
-        messagebox.showinfo("Error", "No detection results found.")
+        progress_label.config(text="No results found to be zipped!")
 
 def select_directory():
     dir_path = filedialog.askdirectory()
     if dir_path:
         threading.Thread(target=run_yolo_command, args=(f"python detect.py --weights weights/exp_19.pt --img 640 --conf 0.4 --source {dir_path}",)).start()
+        start_zipping_thread()
+
+def start_zipping_thread():
+    threading.Thread(target=zip_latest_results).start()
 
 def close_application():
     global process

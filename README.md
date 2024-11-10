@@ -77,13 +77,18 @@ the results will be stored in runs folder
 ### 8. Running the project
 
 - Using the weights trained you can run the model. 
-- You have three options : Run the project using webcam, run the model by storing the pictures in directory, or run the model by storing the videos in the directory
-- If using Images or Videos method, store the files in pic directory and run the command : 
+- You have three options : Run the process using the interface, Run the project using webcam, run the model by storing the pictures or videos in the directory
+1. If using Interface, then the commands are pre inserted in the interface.py file. However this method is not working fully as there are some bugs present in it, but the code will run and the camera will detect images.One of the good features is that this process after detection part will save the detected images into a zip file and then store that into "Downloads" folder. To use this process, run the command : 
+
+```bash 
+python interface.py
+```
+2. If using Images or Videos method, store the files in pic directory and run the command : 
 
 ```bash 
 python detect.py --weights weights/exp_19.pt --img 640 --conf 0.4 --source pics/
 ```
-- if using the webcam, you will have to mention it in placeholder of --source as 0 or 1. 0 will turn on the default webcam of laptop and 1 will run the external webcam connected to laptop. Run the command :  
+3. if using the webcam, you will have to mention it in placeholder of --source as 0 or 1. 0 will turn on the default webcam of laptop and 1 will run the external webcam connected to laptop. Run the command :  
 
 ```bash 
 python detect.py --weights weights/exp_19.pt --img 640 --conf 0.4 --source 1
@@ -97,7 +102,7 @@ python detect.py --weights weights/exp_19.pt --img 640 --conf 0.4 --source 1
 
 ### 9. Results and Graphs
 
-- Since the model has been trained, the results and graphs are stored in exp19 directory :
+- Since the model has been trained, the results and graphs are stored in exp19 directory:
 ```bash 
 cd exp19
 ```
