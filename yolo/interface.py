@@ -18,6 +18,7 @@ def run_yolo_command(command):
     output, error = process.communicate()
     if process.returncode == 0:
         print("Command Executed Successfully!")
+        zip_latest_results()  # Automatically zip results after the command finishes
     else:
         print("Error Occurred:", error.decode())
 
