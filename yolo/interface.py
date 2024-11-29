@@ -29,11 +29,11 @@ def select_camera():
 
     def start_internal_camera():
         cam_window.destroy()
-        start_camera_detection("python detect.py --weights weights/exp_19.pt --img 640 --conf 0.4 --source 0")
+        start_camera_detection("python detect.py --weights weights/exp26.pt --img 640 --conf 0.4 --source 0")
 
     def start_external_camera():
         cam_window.destroy()
-        start_camera_detection("python detect.py --weights weights/exp_19.pt --img 640 --conf 0.4 --source 1")
+        start_camera_detection("python detect.py --weights weights/exp26.pt --img 640 --conf 0.4 --source 1")
 
     tk.Label(cam_window, text="Choose Camera Source", font=("Arial", 12)).pack(pady=10)
     btn_internal = tk.Button(cam_window, text="Use Internal Camera", command=start_internal_camera, width=25, height=2)
